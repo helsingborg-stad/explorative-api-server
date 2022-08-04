@@ -1,3 +1,6 @@
+# Annoying stuff
+.DS_Store
+
 # Logs
 logs
 *.log

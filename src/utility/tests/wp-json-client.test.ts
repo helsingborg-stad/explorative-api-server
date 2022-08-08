@@ -1,6 +1,6 @@
 import {createSimpleWebServer} from './create-simple-web-server'
 import {createWpJsonClient} from '../wp-json-client'
-import {createFakeWpJsonMiddleware} from './create-fake-wp-json-middleware'
+import {createFakeWpJsonMiddleware} from './fake-wp-json-middleware'
 
 const PORT = 4001
 
@@ -28,4 +28,3 @@ describe ('wp-json-client', () => {
         }
     })
 })
-

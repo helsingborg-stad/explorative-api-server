@@ -1,6 +1,18 @@
 import { makeGqlEndpoint } from '../gql/make-gql-endpoint'
 import { makeGqlMiddleware } from '../gql/make-gql-middleware'
-import * as request from 'superagent'
+
+import { createWpJsonClient } from '../utility/wp-json-client'
+
+const stationFromWp = raw => ({
+    title: raw?.title?.plain_text || null,
+    place: raw?.place?.map(({name}) => name).filter(v => v)[0] || null,
+})
+
+const smallDisturbanceFromWp = raw => ({
+    date: raw?.date || null,
+    title: raw?.title?.plain_text || null,
+    content: raw?.content?.plain_text || null,
+})
 
 const AlarmEntity = {
     schema: `
@@ -20,21 +32,22 @@ const AlarmEntity = {
         `,
     resolvers: {
         Station: {
-            title: raw => raw?.title?.plain_text || null,
-            place: raw => raw?.place?.map(({name}) => name).filter(v => v)[0] || null,
+            title: o => o.title,
+            // title: ({title}) => title,
+            place: ({place}) => place,
         },
         SmallDisturbance: {
-            date: raw => raw?.date || null,
-            title: raw => raw?.title?.plain_text || null,
-            content: raw => raw?.content?.plain_text || null,
+            date: ({date}) => date,
+            title: ({title}) => title,
+            content: ({content}) => content,
         },
         Query: {
-            stations: () => request
-                .get('https://api.helsingborg.se/alarm/json/wp/v2/station')
-                .then(({body}) => body),
-            smallDisturbances: () => request
-                .get('https://api.helsingborg.se/alarm/json/wp/v2/small-disturbance?_fields=title,content,date')
-                .then(({body}) => body)
+            stations: () => createWpJsonClient()
+                .getPaginated('https://api.helsingborg.se/alarm/json/wp/v2/station')
+                .then(raw => raw.map(stationFromWp)),
+            smallDisturbances: () => createWpJsonClient()
+                .getPaginated('https://api.helsingborg.se/alarm/json/wp/v2/small-disturbance?_fields=title,content,date')
+                .then(raw => raw.map(smallDisturbanceFromWp))
         }
     }
 }

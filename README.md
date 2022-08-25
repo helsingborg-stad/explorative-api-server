@@ -27,6 +27,21 @@ Implemented endpoints:
 
 The code above starts webserver on http://localhost:3000 with some verbosity.
 
+# Docker 
+This app can be run from docker.
+
+
+## Build image
+```
+docker build -t helsingborg-stad/explorative-api-server .
+```
+
+## Start container
+```
+docker run -it --init -p 3000:80 helsingborg-stad/explorative-api-server -d
+```
+Access app on http://localhost:3000 
+
 # Getting bored
 - [ ] go ahead and implement authentication
 - [ ] find a good strategy for filtering and pagination and implement these in the varous GQL providers

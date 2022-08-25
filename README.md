@@ -38,7 +38,7 @@ docker build -t helsingborg-stad/explorative-api-server .
 
 ## Start container
 ```
-docker run -it --init -p 3000:80 helsingborg-stad/explorative-api-server -d
+docker run -it --init -d -p 3000:80 helsingborg-stad/explorative-api-server
 ```
 Access app on http://localhost:3000 
 

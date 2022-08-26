@@ -1,22 +1,27 @@
-FROM node:18
+# Builder image
+FROM node:18 as builder
 
-# Create app directory
 WORKDIR /usr/src/app
 
-# Install app dependencies
-# A wildcard is used to ensure both package.json AND package-lock.json are copied
-# where available (npm@5+)
-COPY package*.json ./
-COPY yarn.lock ./
-COPY index.js ./
-COPY dist/ ./dist/
+COPY index.js yarn.lock tsconfig.json package*.json ./
+COPY src ./src
 
-ENV NODE_ENV=production
-ENV PORT=80
-RUN yarn install
+RUN yarn install && npx -p typescript tsc
+
+
+
+# Create minimal production image from builder.
+FROM node:18-alpine
+WORKDIR /usr/src/app
 
 EXPOSE 80
+ENV NODE_ENV=production
+ENV PORT=80
+
+COPY --from=builder --chown=node:node /usr/src/app/dist ./dist
+COPY --from=builder --chown=node:node /usr/src/app/package*.json /usr/src/app/index.js /usr/src/app/yarn.lock ./
+
+RUN yarn install --production=true
+USER node
 
 CMD ["node", "index.js"]
-# If you are building your code for production
-# RUN npm ci --only=production

@@ -37,10 +37,12 @@ The code above starts webserver on http://localhost:3000 with some verbosity.
 This app can be run from docker.
 
 ## Docker compose
-Dev environment with watch for code changes.
+Dev environment with watch for code changes.  
+Copy `.env-example` to `.env` and run
 ```sh
     $ docker compose up
 ```
+The code above starts webserver on http://localhost:3000
 
 ## Build image
 ```

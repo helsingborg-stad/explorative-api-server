@@ -46,15 +46,27 @@ The code above starts webserver on http://localhost:3000
 
 ## Build image
 ```
-docker build -t ghcr.io/helsingborg-stad/explorative-api-server .
+    $ docker build -t ghcr.io/helsingborg-stad/explorative-api-server .
 ```
 
 ## Start container
 ```
-docker run -it --init -d -p 3000:80 ghcr.io/helsingborg-stad/explorative-api-server
+    $ docker run -it --init -d -p 3000:80 ghcr.io/helsingborg-stad/explorative-api-server
 ```
 Access app on http://localhost:3000 
 
+
+# Deploy
+Any changes pushed to main branch will be build and pushed to container registry with tag latest.  
+## Versioning docker image
+Run 
+``` sh
+    $ yarn version
+```
+Select your version and then push to 
+```sh
+    $ git push origin main --follow-tags
+```
 
 # Getting bored
 - [ ] go ahead and implement authentication

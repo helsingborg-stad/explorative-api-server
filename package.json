@@ -1,6 +1,6 @@
 {
   "name": "explorative-api-server",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Explorative web server for exposing public data from Helsingborgs stad",
   "main": "index.js",
   "scripts": {

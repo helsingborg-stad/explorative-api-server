@@ -20,9 +20,15 @@ Implemented endpoints:
 
 # Getting started
 
+## Run compiled js
 ```sh
     $ yarn
     $ DEBUG=* yarn start
+```
+The code above starts webserver on http://localhost:3000 with some verbosity.
+## Run and watch for code changes
+```sh
+    $ DEBUG=* yarn watch
 ```
 
 The code above starts webserver on http://localhost:3000 with some verbosity.
@@ -30,17 +36,23 @@ The code above starts webserver on http://localhost:3000 with some verbosity.
 # Docker 
 This app can be run from docker.
 
+## Docker compose
+Dev environment with watch for code changes.
+```sh
+    $ docker compose up
+```
 
 ## Build image
 ```
-docker build -t helsingborg-stad/explorative-api-server .
+docker build -t ghcr.io/helsingborg-stad/explorative-api-server .
 ```
 
 ## Start container
 ```
-docker run -it --init -d -p 3000:80 helsingborg-stad/explorative-api-server
+docker run -it --init -d -p 3000:80 ghcr.io/helsingborg-stad/explorative-api-server
 ```
 Access app on http://localhost:3000 
+
 
 # Getting bored
 - [ ] go ahead and implement authentication

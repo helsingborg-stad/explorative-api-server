@@ -1,5 +1,7 @@
 import { makeExecutableSchema } from '@graphql-tools/schema'
 import { graphql } from 'graphql'
+import { GQLEndpoint, GQLEndpointArgs, ResolverMap } from './types'
+
 
 export function makeGqlEndpoint<TContext = any, TModel = any>({
         schema,

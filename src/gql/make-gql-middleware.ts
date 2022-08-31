@@ -1,5 +1,6 @@
 import { makeFsEndpoint } from "../fs-ns"
 import { makeGqlEndpoint } from "./make-gql-endpoint"
+import { GQLEndpoint } from "./types"
 const debug = require('debug')('gql-middleware')
 
 export function makeGqlMiddleware<TContext, TModel>(

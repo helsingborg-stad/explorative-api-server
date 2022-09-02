@@ -1,25 +1,16 @@
-import * as Koa from 'koa'
-import * as Router from 'koa-router'
-import * as bodyParser from 'koa-bodyparser'
-import * as cors from '@koa/cors'
+import { createApplication } from './application'
+import alarmModule from './api/alarm'
+import localfsModule from './api/localfs'
+import swaggerModule from './swagger-module'
+import webFrameworkModule from './web-framework-module'
 
-import { makeFsMiddleware } from './fs-ns'
-import { makeAlarmMiddleware } from './alarm-ns'
-
-const app = new Koa()
-const router = new Router()
-const PORT = process.env.PORT || 3000
-
-router
-    .post('/alarm/graphql', makeAlarmMiddleware())
-    .post('/localfs/graphql', makeFsMiddleware())
-
-app
-    .use(cors())
-    .use(bodyParser())
-    .use(router.routes())
-    .use(router.allowedMethods())
-
-app.listen(PORT, () => {
-    console.log(`listening on port ${PORT}`)
+const application = createApplication({
+  definition: './apis.openapi.yml'
 })
+
+application
+  .use(webFrameworkModule)
+  .use(swaggerModule)
+  .use(alarmModule)
+  .use(localfsModule)
+  .start(process.env.PORT || 3000)

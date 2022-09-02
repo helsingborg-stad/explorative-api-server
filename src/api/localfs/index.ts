@@ -1,7 +1,8 @@
 import {realpath, stat, readdir} from 'node:fs/promises'
 import {basename, join} from 'node:path'
-import { makeGqlEndpoint } from '../gql/make-gql-endpoint'
-import { makeGqlMiddleware } from '../gql/make-gql-middleware'
+import { ApplicationContext } from '../../application/types'
+import { makeGqlEndpoint } from '../../gql/make-gql-endpoint'
+import { makeGqlMiddleware } from '../../gql/make-gql-middleware'
 
 const makeEntry = async (path: string) => {
     var rp = await realpath(path)
@@ -42,10 +43,19 @@ const FSEntity = {
     }
 }
 
-export function makeFsEndpoint () {
+function makeFsEndpoint () {
     return makeGqlEndpoint(FSEntity)
 }
 
-export function makeFsMiddleware () {
+function makeFsMiddleware () {
     return makeGqlMiddleware(makeFsEndpoint())
 }
+
+const localfsModule = ({api}: ApplicationContext) => {
+    const fsGqlHandler = makeFsMiddleware()
+    api.register({
+        localfsGql: (c, ctx) => fsGqlHandler(ctx)
+    })
+}
+
+export default localfsModule

@@ -1,7 +1,8 @@
-import { makeGqlEndpoint } from '../gql/make-gql-endpoint'
-import { makeGqlMiddleware } from '../gql/make-gql-middleware'
+import { ApplicationContext } from '../../application/types'
+import { makeGqlEndpoint } from '../../gql/make-gql-endpoint'
+import { makeGqlMiddleware } from '../../gql/make-gql-middleware'
 
-import { createWpJsonClient } from '../utility/wp-json-client'
+import { createWpJsonClient } from '../../utility/wp-json-client'
 
 const stationFromWp = raw => ({
     title: raw?.title?.plain_text || null,
@@ -52,6 +53,16 @@ const AlarmEntity = {
     }
 }
 
-export const makeAlarmEndpoint = () => makeGqlEndpoint(AlarmEntity)
+const makeAlarmEndpoint = () => makeGqlEndpoint(AlarmEntity)
 
-export const makeAlarmMiddleware = () => makeGqlMiddleware(makeAlarmEndpoint())
+const makeAlarmMiddleware = () => makeGqlMiddleware(makeAlarmEndpoint())
+
+
+const alarmModule = ({api}: ApplicationContext) => {
+    const alarmGqlHandler = makeAlarmMiddleware()
+    api.register({
+        alarmGql: (c, ctx) => alarmGqlHandler(ctx)
+    })
+}
+
+export default alarmModule
